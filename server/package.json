@@ -9,7 +9,18 @@
     "start": "node dist/index.js",
     "seed": "ts-node scripts/seed.ts"
   },
-  "keywords": ["bookshop", "ai", "voice", "tickets"],
+  "keywords": [
+    "bookshop",
+    "ai",
+    "voice",
+    "tickets"
+  ],
   "license": "MIT",
-  "author": "Fasrin Rahman"
+  "author": "Fasrin Rahman",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.10.0"
+  }
 }
