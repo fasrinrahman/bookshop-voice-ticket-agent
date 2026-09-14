@@ -1,23 +1,39 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import { env } from './config/env';
+import { connectDB, isDBConnected } from './config/db';
 import { logger } from './shared/logger';
 import { errorHandler } from './middleware/errorHandler';
 import { requestLogger } from './middleware/requestLogger';
+import { notFound } from './middleware/notFound';
 
 const app = express();
 
-// Middleware
+// Security
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+  })
+);
+
+// CORS
 app.use(cors({ origin: env.clientUrl, credentials: true }));
+
+// Body parsing
 app.use(express.json({ limit: '1mb' }));
+
+// Logging
 app.use(requestLogger);
 
 // Health check
 app.get('/health', (_req: Request, res: Response) => {
-  res.json({
-    status: 'ok',
+  const mongoUp = isDBConnected();
+  res.status(mongoUp ? 200 : 503).json({
+    status: mongoUp ? 'ok' : 'degraded',
     uptime: Math.floor(process.uptime()),
-    mongo: 'pending',  // updated Day 3
+    mongo: mongoUp ? 'up' : 'down',
     version: '1.0.0',
     timestamp: new Date().toISOString(),
   });
@@ -32,29 +48,48 @@ app.get('/', (_req: Request, res: Response) => {
   });
 });
 
-// 404 handler
-app.use((_req: Request, res: Response) => {
-  res.status(404).json({
-    success: false,
-    error: { code: 'NOT_FOUND', message: 'Route not found' },
-  });
-});
+// 404
+app.use(notFound);
 
 // Error handler (must be last)
 app.use(errorHandler);
 
 // Start server
-const server = app.listen(env.port, () => {
-  logger.info('Server started', {
-    port: env.port,
-    env: env.nodeEnv,
-  });
+async function start(): Promise<void> {
+  try {
+    await connectDB();
+
+    const server = app.listen(env.port, () => {
+      logger.info('Server started', {
+        port: env.port,
+        env: env.nodeEnv,
+      });
+    });
+
+    process.on('SIGTERM', () => {
+      logger.info('SIGTERM received, shutting down');
+      server.close(() => process.exit(0));
+    });
+  } catch (err) {
+    logger.error('Failed to start server', {
+      message: (err as Error).message,
+    });
+    process.exit(1);
+  }
+}
+
+process.on('unhandledRejection', (reason) => {
+  logger.error('Unhandled rejection', { reason: String(reason) });
 });
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  logger.info('SIGTERM received, shutting down');
-  server.close(() => process.exit(0));
+process.on('uncaughtException', (err) => {
+  logger.error('Uncaught exception', {
+    message: err.message,
+    stack: err.stack,
+  });
+  process.exit(1);
 });
+
+start();
 
 export default app;

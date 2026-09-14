@@ -31,7 +31,6 @@ export function errorHandler(
     return;
   }
 
-  // Unexpected error
   logger.error('Unhandled error', {
     requestId,
     message: err.message,

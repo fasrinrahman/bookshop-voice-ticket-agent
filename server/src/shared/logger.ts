@@ -7,7 +7,11 @@ interface LogEntry {
   [key: string]: unknown;
 }
 
-function format(level: LogLevel, message: string, meta?: Record<string, unknown>): string {
+function format(
+  level: LogLevel,
+  message: string,
+  meta?: Record<string, unknown>
+): string {
   const entry: LogEntry = {
     level,
     message,
@@ -18,13 +22,16 @@ function format(level: LogLevel, message: string, meta?: Record<string, unknown>
 }
 
 export const logger = {
-  info: (message: string, meta?: Record<string, unknown>) =>
+  info: (message: string, meta?: Record<string, unknown>): void =>
     console.log(format('info', message, meta)),
-  warn: (message: string, meta?: Record<string, unknown>) =>
+
+  warn: (message: string, meta?: Record<string, unknown>): void =>
     console.warn(format('warn', message, meta)),
-  error: (message: string, meta?: Record<string, unknown>) =>
+
+  error: (message: string, meta?: Record<string, unknown>): void =>
     console.error(format('error', message, meta)),
-  debug: (message: string, meta?: Record<string, unknown>) => {
+
+  debug: (message: string, meta?: Record<string, unknown>): void => {
     if (process.env.NODE_ENV !== 'production') {
       console.log(format('debug', message, meta));
     }
