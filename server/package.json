@@ -9,7 +9,12 @@
     "start": "node dist/index.js",
     "seed": "ts-node scripts/seed.ts"
   },
-  "keywords": ["bookshop", "ai", "voice", "tickets"],
+  "keywords": [
+    "bookshop",
+    "ai",
+    "voice",
+    "tickets"
+  ],
   "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
@@ -25,5 +30,7 @@
     "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
-  }
+  },
+  "author": "",
+  "type": "commonjs"
 }
