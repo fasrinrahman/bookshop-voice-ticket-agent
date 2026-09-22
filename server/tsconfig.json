@@ -5,16 +5,23 @@
     "lib": ["ES2022"],
     "outDir": "./dist",
     "rootDir": "./src",
+
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "moduleResolution": "bundler",
+
+    "moduleResolution": "node",
+
+    "types": ["node"],
+    "typeRoots": ["./node_modules/@types"],
+
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "declaration": false,
     "removeComments": true,
+
     "noImplicitAny": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
@@ -23,6 +30,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*", "scripts/**/*"],
+
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }
