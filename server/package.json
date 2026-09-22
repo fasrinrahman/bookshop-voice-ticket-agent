@@ -9,26 +9,21 @@
     "start": "node dist/index.js",
     "seed": "ts-node scripts/seed.ts"
   },
-  "keywords": [
-    "bookshop",
-    "ai",
-    "voice",
-    "tickets"
-  ],
+  "keywords": ["bookshop", "ai", "voice", "tickets"],
   "license": "MIT",
-  "author": "Fasrin Rahman",
   "dependencies": {
-    "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "mongoose": "^9.10.0"
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "helmet": "^8.0.0",
+    "mongoose": "^8.8.0"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6",
-    "@types/node": "^22.20.2",
-    "nodemon": "^3.1.14",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.9.0",
+    "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
-    "typescript": "^7.0.2"
+    "typescript": "^5.6.3"
   }
 }
